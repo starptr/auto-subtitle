@@ -72,6 +72,7 @@ def main():
 
 def get_audio(paths):
     temp_dir = tempfile.gettempdir()
+    print(f"Using temporary directory: {temp_dir}")
 
     audio_paths = {}
 
@@ -81,7 +82,7 @@ def get_audio(paths):
 
         ffmpeg.input(path).output(
             output_path,
-            acodec="pcm_s16le", ac=1, ar="16k", af="aresample=async=1"
+            acodec="pcm_s16le", ac=1, ar="16k", af="aresample=async=1:min_hard_comp=0.100000:first_pts=0"
         ).run(quiet=True, overwrite_output=True)
 
         audio_paths[path] = output_path
