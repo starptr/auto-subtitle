@@ -8,6 +8,7 @@ from .utils import filename, str2bool, write_srt
 
 
 def main():
+    print("starptr's fork")
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("video", nargs="+", type=str,
@@ -80,7 +81,7 @@ def get_audio(paths):
 
         ffmpeg.input(path).output(
             output_path,
-            acodec="pcm_s16le", ac=1, ar="16k"
+            acodec="pcm_s16le", ac=1, ar="16k", af="aresample=async=1"
         ).run(quiet=True, overwrite_output=True)
 
         audio_paths[path] = output_path
