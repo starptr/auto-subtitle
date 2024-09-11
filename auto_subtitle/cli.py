@@ -97,7 +97,7 @@ def get_subtitles(audio_paths: list, output_srt: bool, output_dir: str, transcri
 
     for path, audio_path in audio_paths.items():
         srt_path = output_dir if output_srt else tempfile.gettempdir()
-        srt_path = os.path.join(srt_path, f"{filename(path)}.srt")
+        srt_path = os.path.join(srt_path, f"{filename(path)}.auto-subtitle-{utils.get_version()}.srt")
         
         print(
             f"Generating subtitles for {filename(path)}... This might take a while."
