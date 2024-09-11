@@ -5,10 +5,12 @@ import argparse
 import warnings
 import tempfile
 from .utils import filename, str2bool, write_srt
+from . import utils
 
 
 def main():
     print("starptr's fork")
+    print(f"Version: {utils.get_version()}")
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("video", nargs="+", type=str,

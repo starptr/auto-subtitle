@@ -1,5 +1,42 @@
 import os
 from typing import Iterator, TextIO
+import json
+from importlib.metadata import Distribution
+import pkg_resources
+
+import git
+
+pkg_is_editable = None
+def is_editable():
+    global pkg_is_editable
+    if pkg_is_editable is None:
+        direct_url = Distribution.from_name("auto_subtitle").read_text("direct_url.json")
+        pkg_is_editable = json.loads(direct_url).get("dir_info", {}).get("editable", False)
+    return pkg_is_editable
+
+def project_dir():
+    return os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), ".."))
+
+global_repo = None
+def repo():
+    global global_repo
+    if global_repo is None:
+        global_repo = git.Repo(project_dir())
+    return global_repo
+
+def get_sha_readable():
+    sha = repo().head.object.hexsha
+    return sha[:7]
+
+def get_release_version():
+    version = pkg_resources.require("auto_subtitle")[0].version
+    return version
+
+def get_version():
+    if not is_editable():
+        return get_release_version()
+    is_dirty = repo().is_dirty()
+    return f"{get_sha_readable()}{'+dirty' if is_dirty else ''}"
 
 
 def str2bool(string):
