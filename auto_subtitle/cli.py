@@ -15,15 +15,15 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("video", nargs="+", type=str,
                         help="paths to video files to transcribe")
-    parser.add_argument("--model", default="small",
+    parser.add_argument("--model", default="medium",
                         choices=whisper.available_models(), help="name of the Whisper model to use")
     parser.add_argument("--output_dir", "-o", type=str,
                         default=".", help="directory to save the outputs")
-    parser.add_argument("--output_srt", type=str2bool, default=False,
+    parser.add_argument("--output_srt", type=str2bool, default=True,
                         help="whether to output the .srt file along with the video files")
-    parser.add_argument("--srt_only", type=str2bool, default=False,
-                        help="only generate the .srt file and not create overlayed video")
-    parser.add_argument("--verbose", type=str2bool, default=False,
+    parser.add_argument("--inject-srt", type=str2bool, default=False,
+                        help="Modify the original video to include the subtitles")
+    parser.add_argument("--verbose", type=str2bool, default=True,
                         help="whether to print out the progress and debug messages")
 
     parser.add_argument("--task", type=str, default="transcribe", choices=[
@@ -35,7 +35,7 @@ def main():
     model_name: str = args.pop("model")
     output_dir: str = args.pop("output_dir")
     output_srt: bool = args.pop("output_srt")
-    srt_only: bool = args.pop("srt_only")
+    srt_only: bool = not args.pop("inject-srt")
     language: str = args.pop("language")
     
     os.makedirs(output_dir, exist_ok=True)
